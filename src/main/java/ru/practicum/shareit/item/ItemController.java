@@ -9,9 +9,6 @@ import ru.practicum.shareit.item.dto.ItemUpdateDto;
 
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RestController
 @RequestMapping("/items")
@@ -34,6 +31,9 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemDto> itemSearch(@RequestParam String text) {
         log.debug("Searching text: {}", text);
+        if (text == null || text.isEmpty()) {
+            return List.of();
+        }
         return itemService.itemSearch(text);
     }
 

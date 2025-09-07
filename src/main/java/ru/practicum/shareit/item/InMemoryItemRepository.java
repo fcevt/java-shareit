@@ -72,9 +72,6 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public List<ItemDto> itemSearch(String search) {
-        if (search == null || search.isEmpty()) {
-            return List.of();
-        }
         return items.values().stream()
                 .filter(item -> item.getName().toLowerCase().contains(search.toLowerCase())
                         || item.getDescription().toLowerCase().contains(search.toLowerCase()))
