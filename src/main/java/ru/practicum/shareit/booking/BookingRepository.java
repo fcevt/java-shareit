@@ -35,25 +35,25 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBooker_Id(Long bookerId);
 
-    List<Booking> findAllByBooker_IdAndEndBefore(Long bookerId, LocalDateTime EndBefore);
+    List<Booking> findAllByBooker_IdAndEndBefore(Long bookerId, LocalDateTime endBefore);
 
     List<Booking> findAllByBooker_IdAndBookingStatus(Long bookerId, StatusBooking bookingStatus);
 
-    List<Booking> findAllByBooker_IdAndStartAfter(Long bookerId, LocalDateTime StartAfter);
+    List<Booking> findAllByBooker_IdAndStartAfter(Long bookerId, LocalDateTime startAfter);
 
-    List<Booking> findAllByBooker_IdAndStartBeforeAndEndAfter(Long bookerId, LocalDateTime StartBefore,
-                                                              LocalDateTime EndAfter);
+    List<Booking> findAllByBooker_IdAndStartBeforeAndEndAfter(Long bookerId, LocalDateTime startBefore,
+                                                              LocalDateTime endAfter);
 
     List<Booking> findAllByItemIn(Collection<Item> items);
 
-    List<Booking> findAllByItemInAndEndBefore(Collection<Item> items, LocalDateTime EndBefore);
+    List<Booking> findAllByItemInAndEndBefore(Collection<Item> items, LocalDateTime endBefore);
 
-    List<Booking> findAllByItemInAndStartAfter(Collection<Item> items, LocalDateTime StartAfter);
+    List<Booking> findAllByItemInAndStartAfter(Collection<Item> items, LocalDateTime startAfter);
 
     List<Booking> findAllByItemInAndBookingStatus(Collection<Item> items, StatusBooking bookingStatus);
 
-    List<Booking> findAllByItemInAndStartBeforeAndEndAfter(Collection<Item> items, LocalDateTime StartBefore,
-                                                           LocalDateTime EndAfter);
+    List<Booking> findAllByItemInAndStartBeforeAndEndAfter(Collection<Item> items, LocalDateTime startBefore,
+                                                           LocalDateTime endAfter);
 
     List<Booking> findAllByBookerAndItem(User booker, Item item);
 }
