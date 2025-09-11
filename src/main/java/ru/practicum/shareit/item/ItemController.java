@@ -4,8 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.item.dto.*;
 
 import java.util.List;
 
@@ -17,13 +16,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/{id}")
-    public ItemDto getItemById(@PathVariable long id) {
+    public ItemDtoWithBooking getItemById(@PathVariable long id) {
         log.debug("Getting item by id: {}", id);
         return itemService.getItemById(id);
     }
 
     @GetMapping
-    public List<ItemDto> getUserItems(@RequestHeader("X-Sharer-User-Id") long ownerId) {
+    public List<ItemDtoWithBooking> getUserItems(@RequestHeader("X-Sharer-User-Id") long ownerId) {
         log.debug("Getting user items: {}", ownerId);
         return itemService.getUserItems(ownerId);
     }
@@ -38,15 +37,22 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto createItem(@RequestBody @Valid ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") long ownerId) {
-        log.debug("Created new item: {}, ownerId: {},", itemDto, ownerId);
-        return itemService.createItem(itemDto, ownerId);
+    public Item createItem(@RequestBody @Valid Item item, @RequestHeader("X-Sharer-User-Id") long ownerId) {
+        log.debug("Created new item: {}, ownerId: {},", item, ownerId);
+        return itemService.createItem(item, ownerId);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto updateItem(@RequestBody ItemUpdateDto itemUpdateDto,
+    public Item updateItem(@RequestBody ItemUpdateDto itemUpdateDto,
                               @RequestHeader("X-Sharer-User-Id") long ownerId, @PathVariable long id) {
         log.debug("Updating item: {}, ownerId: {}, itemId: {}", itemUpdateDto, ownerId, id);
         return itemService.updateItem(itemUpdateDto, ownerId, id);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment addComment(@PathVariable long itemId, @RequestBody Comment comment,
+                              @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.debug("Adding comment: {}, itemId: {}", comment, itemId);
+        return itemService.addComment(itemId, comment, userId);
     }
 }
