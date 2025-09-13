@@ -9,9 +9,9 @@ public interface BookingService {
 
     BookingDto createBooking(BookingCreateDto booking, long bookerId);
 
-    BookingDto bookingApproval(long bookingId, long ownerId, String approved);
+    BookingDto bookingApproval(long bookingId, long ownerId, boolean approved);
 
-    BookingDto getBooking(long bookingId, long userId);
+    BookingDto getBooking(long bookingId, Long userId);
 
     List<Booking> getUserBookings(String state, long userId);
 

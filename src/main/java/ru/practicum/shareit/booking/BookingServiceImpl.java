@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,32 +47,26 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto bookingApproval(long bookingId, long ownerId, String approved) {
+    public BookingDto bookingApproval(long bookingId, long ownerId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking not found"));
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new ValidationException("User not found"));
         if (booking.getItem().getOwner().getId() != ownerId) {
             throw new ValidationException("изменить статус бронирования может только владелец");
         }
-        if (approved.equals("true")) {
-            booking.setBookingStatus(StatusBooking.APPROVED);
-            return BookingDto.mapBookingToDto(bookingRepository.save(booking));
-        } else if (approved.equals("false")) {
-            booking.setBookingStatus(StatusBooking.REJECTED);
-            return BookingDto.mapBookingToDto(bookingRepository.save(booking));
-        } else {
-            throw new ValidationException("Параметр approved может иметь только два значения");
-        }
+        booking.setBookingStatus(approved ? StatusBooking.APPROVED : StatusBooking.REJECTED);
+        return BookingDto.mapBookingToDto(bookingRepository.save(booking));
     }
 
     @Override
-    public BookingDto getBooking(long bookingId, long userId) {
+    public BookingDto getBooking(long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
-        if (booking.getItem().getOwner().getId() == userId || booking.getBooker().getId() == userId) {
-            return BookingDto.mapBookingToDto(booking);
+        if (!Objects.equals(booking.getItem().getOwner().getId(), userId)
+                && !Objects.equals(booking.getBooker().getId(), userId)) {
+            throw new ValidationException("Просматривать бронирование могут только владелец вещи и создатель брони");
         }
-        throw new ValidationException("Просматривать бронирование могут только владелец вещи и создатель брони");
+        return BookingDto.mapBookingToDto(booking);
     }
 
     @Override
