@@ -1,35 +1,30 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.item;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
-import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
+@NoArgsConstructor
 @Entity
-@Table(name = "bookings")
-@RequiredArgsConstructor
-@AllArgsConstructor
+@Table(name = "comments")
 @Getter
 @Setter
-public class Booking {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
-    @Column(name = "start_date")
-    private LocalDateTime start;
-    @Column(name = "end_date")
-    private LocalDateTime end;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private Long id;
+    private String text;
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
-    @OneToOne(fetch = FetchType.EAGER)
-    private User booker;
-    @Enumerated(EnumType.STRING)
-    private StatusBooking bookingStatus;
+    @Column(name = "author")
+    private String authorName;
+    @Column(name = "create_date")
+    LocalDateTime created;
 
     @Override
     public final boolean equals(Object o) {
@@ -38,8 +33,8 @@ public class Booking {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Booking booking = (Booking) o;
-        return getBookingId() != null && Objects.equals(getBookingId(), booking.getBookingId());
+        Comment comment = (Comment) o;
+        return id != null && Objects.equals(id, comment.id);
     }
 
     @Override
@@ -50,9 +45,6 @@ public class Booking {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "bookingId = " + bookingId + ", " +
-                "start = " + start + ", " +
-                "end = " + end + ", " +
-                "bookingStatus = " + bookingStatus + ")";
+                "id = " + id + ")";
     }
 }
