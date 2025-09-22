@@ -1,40 +1,33 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.request;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 import ru.practicum.shareit.user.User;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@NoArgsConstructor
+
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
-@Table(name = "items")
-public class Item {
+@Table(name = "requests")
+public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotBlank
-    @Column(nullable = false, length = 100)
-    private String name;
-    @NotBlank
-    @Column(nullable = false, length = 1500)
-    private String description;
-    @NotNull
-    @Column(name = "is_available")
-    private Boolean available;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User owner;
-    @Column(name = "request_id")
     private Long requestId;
+    @NotBlank
+    private String description;
+    @OneToOne(fetch = FetchType.EAGER)
+    private User requester;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
     @Override
     public final boolean equals(Object o) {
@@ -43,23 +36,12 @@ public class Item {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Item item = (Item) o;
-        return getId() != null && Objects.equals(getId(), item.getId());
+        Request request = (Request) o;
+        return getRequestId() != null && Objects.equals(getRequestId(), request.getRequestId());
     }
 
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "available = " + available + ", " +
-                "description = " + description + ", " +
-                "name = " + name + ")";
-    }
-//    @OneToOne(fetch = FetchType.LAZY)
-//    private ItemRequest request;
 }

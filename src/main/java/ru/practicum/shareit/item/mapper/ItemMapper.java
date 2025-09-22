@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoWithComments;
 import ru.practicum.shareit.item.dto.ItemDtoWithBooking;
+import ru.practicum.shareit.request.Answer;
 
 import java.util.List;
 
@@ -42,5 +43,13 @@ public class ItemMapper {
         itemDtoWithBooking.setLastBooking(lastBooking);
         itemDtoWithBooking.setNextBooking(nextBooking);
         return itemDtoWithBooking;
+    }
+
+    public static Answer itemToAnswer(Item item) {
+        Answer answer = new Answer();
+        answer.setItemId(item.getId());
+        answer.setName(item.getName());
+        answer.setOwnerId(item.getOwner().getId());
+        return answer;
     }
 }

@@ -7,6 +7,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 import ru.practicum.shareit.user.User;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,4 +19,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<ItemDto> searchItemByNameAndDescriptionContaining(String text);
 
     List<Item> findAllByOwner(User owner);
+
+    List<Item> findAllByRequestId(Long requestId);
+
+    List<Item> findAllByRequestIdIn(Collection<Long> requestIds);
 }

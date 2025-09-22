@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS items (
     description VARCHAR(1500) NOT NULL,
     is_available BOOLEAN,
     owner_id BIGINT REFERENCES users(id),
-    request_id BIGINT
+    request_id BIGINT REFERENCES requests(id)
 );
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -27,3 +27,9 @@ CREATE TABLE IF NOT EXISTS comments (
     author VARCHAR,
     create_date TIMESTAMP
     );
+CREATE TABLE IF NOT EXISTS requests (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description VARCHAR(1500),
+    requester_id BIGINT REFERENCES users(id),
+    created_date TIMESTAMP
+);
