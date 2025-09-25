@@ -1,0 +1,35 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(320) NOT NULL,
+    UNIQUE(email)
+);
+CREATE TABLE IF NOT EXISTS items (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(1500) NOT NULL,
+    is_available BOOLEAN,
+    owner_id BIGINT REFERENCES users(id),
+    request_id BIGINT
+);
+CREATE TABLE IF NOT EXISTS bookings (
+    booking_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    item_id BIGINT REFERENCES items(id),
+    booker_id BIGINT REFERENCES users(id),
+    booking_status VARCHAR NOT NULL
+);
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    text VARCHAR(1500),
+    item_id BIGINT REFERENCES items(id),
+    author VARCHAR,
+    create_date TIMESTAMP
+    );
+CREATE TABLE IF NOT EXISTS requests (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    description VARCHAR(1500),
+    requester_id BIGINT REFERENCES users(id),
+    created_date TIMESTAMP
+);
